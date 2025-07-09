@@ -5,7 +5,7 @@ template<typename T>
 class Unique_ptr{
 public:
 
-    Unique_ptr(T* p = nullptr)
+    explicit Unique_ptr(T* p = nullptr)
         : ptr{p}
     {}
 
