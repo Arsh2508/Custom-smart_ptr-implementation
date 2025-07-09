@@ -32,6 +32,16 @@ public:
        controlBlock->reference_count++;
     }
 
+    template<typename U>
+    Shared_ptr(Unique_ptr<U>&& other)
+        : ptr{other.release()}
+        , controlBlock{ ptr ? new ControlBlock<U>(ptr) : nullptr}
+    {
+        if(controlBlock){
+            controlBlock->reference_count = 1;
+        }
+    }
+
     Shared_ptr& operator=(Shared_ptr rhs){
         swap(rhs);
         return *this;
@@ -54,7 +64,7 @@ public:
             controlBlock->reference_count--;
             if(controlBlock->reference_count == 0){
                 delete ptr;
-                if(controlBlock->weak_ref_count == 0){
+                 if(controlBlock->weak_ref_count == 0){
                     delete controlBlock;
                 }
             }
