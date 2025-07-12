@@ -41,6 +41,14 @@ public:
         return ptr;
     }
 
+    const T& operator*() const {
+        return *ptr;
+    }
+    
+    const T* operator->() const {
+        return ptr;
+    }
+
     void reset(T* p = nullptr) noexcept
     {
         delete ptr;

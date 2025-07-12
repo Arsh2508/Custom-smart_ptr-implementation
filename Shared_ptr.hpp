@@ -1,19 +1,8 @@
 #ifndef SHARED_PTR_HPP
 #define SHARED_PTR_HPP
 #include <iostream>
-//#include "Weak_ptr.hpp"
-
-template<typename T>
-struct ControlBlock{
-    ControlBlock(T* ptr)
-        : reference_count{0}
-        , weak_ref_count{0}
-        , obj{ptr}
-    {}
-    size_t reference_count;
-    size_t weak_ref_count;
-    T* obj;
-};
+#include "ControlBlock.hpp"
+//#include "Weak_ptr.hpp" 
 
 template<typename T>
 class Shared_ptr{
@@ -22,7 +11,7 @@ public:
         : ptr{p}
         , controlBlock{new ControlBlock<T>(p)}
     {
-        controlBlock->reference_count = 1;
+        controlBlock->reference_count = 1;  
     }
 
     Shared_ptr(const Shared_ptr& other)
@@ -86,6 +75,14 @@ public:
     }
     
     T* operator->(){
+        return ptr;
+    }
+
+    const T& operator*() const {
+        return *ptr;
+    }
+    
+    const T* operator->() const {
         return ptr;
     }
     
