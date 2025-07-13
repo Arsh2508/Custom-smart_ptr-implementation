@@ -6,6 +6,9 @@
 #include "Weak_ptr.hpp" 
 
 template<typename T>
+class Unique_ptr;
+
+template<typename T>
 class Shared_ptr{
 public:
     explicit Shared_ptr(T* p = nullptr)
@@ -25,7 +28,7 @@ public:
     template<typename U>
     Shared_ptr(Unique_ptr<U>&& other)
         : ptr{other.release()}
-        , controlBlock{ ptr ? new ControlBlock<U>(ptr) : nullptr}
+        , controlBlock{ ptr ? new ControlBlock<T>(ptr) : nullptr}
     {
         if(controlBlock){
             controlBlock->reference_count = 1;
