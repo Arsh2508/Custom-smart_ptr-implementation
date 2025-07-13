@@ -1,8 +1,9 @@
 #ifndef SHARED_PTR_HPP
 #define SHARED_PTR_HPP
 #include <iostream>
+#include <memory>
 #include "ControlBlock.hpp"
-//#include "Weak_ptr.hpp" 
+#include "Weak_ptr.hpp" 
 
 template<typename T>
 class Shared_ptr{
@@ -68,7 +69,16 @@ public:
         return *this;
     }
     
-    //Shared_ptr(const Weak_ptr& other);
+    template<typename W>
+    Shared_ptr(const Weak_ptr<W>& other)
+        : controlBlock{other.get_control_block()}
+    {
+        if(!controlBlock || controlBlock->reference_count == 0){
+            throw std::bad_weak_ptr{};
+        }
+        ptr = other.get_data();
+        controlBlock->reference_count++;
+    }
     
     T& operator*(){
         return *ptr;
@@ -114,6 +124,10 @@ public:
         else{
             controlBlock->reference_count--;
         }
+    }
+
+    ControlBlock<T>* get_control_block() const noexcept {
+        return controlBlock;
     }
 
 private:
